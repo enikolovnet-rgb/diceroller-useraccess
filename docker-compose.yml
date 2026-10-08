@@ -25,6 +25,7 @@ services:
       sqlserver:
         condition: service_healthy
     environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
       ConnectionStrings__UserAccess: "Server=sqlserver;Database=UserAccess;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True"
       Jwt__Issuer: ${JWT_ISSUER:-diceroller}
       Jwt__Audience: ${JWT_AUDIENCE:-diceroller}

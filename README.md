@@ -19,7 +19,8 @@ docker compose up -d --build
 ```
 
 The service listens on `http://localhost:5080` (`USERACCESS_PORT`). Migrations are applied at startup in the
-container. Photos are kept in the `useraccess-photos` volume, the database in `sqlserver-data`.
+container. The compose file runs the service as `Development` (`ASPNETCORE_ENVIRONMENT`), so Scalar is at
+`http://localhost:5080/scalar`. Photos are kept in the `useraccess-photos` volume, the database in `sqlserver-data`.
 `docker compose down -v` removes both.
 
 Building the image restores the `DiceRoller.BuildingBlocks.*` packages from GitHub Packages, so `NUGET_AUTH_TOKEN`
