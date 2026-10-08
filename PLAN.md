@@ -29,20 +29,22 @@ Depends on `DiceRoller.BuildingBlocks.*` v0.1.0 (local feed or GitHub Packages).
 
 ## 3. Application
 
-- [ ] Interfaces: `IUserRepository`, `IPasswordHasher`, `IPhotoStorage`, `ITokenIssuer`, `ICurrentUser`, `IUnitOfWork` (or `SaveChangesAsync` on repository)
-- [ ] `RegisterUserRequest` (FirstName, LastName, Email, Password, Photo as stream + file name + content type + length)
-- [ ] `RegisterUserRequestValidator`:
+Handlers are MediatR `IRequestHandler`s (MediatR 12.5.0, the last Apache-2.0 release); requests implement `IRequest<Result<T>>`.
+
+- [x] Interfaces: `IUserRepository`, `IPasswordHasher`, `IPhotoStorage`, `ITokenIssuer`, `ICurrentUser`, `IUnitOfWork` (or `SaveChangesAsync` on repository)
+- [x] `RegisterUserRequest` (FirstName, LastName, Email, Password, Photo as stream + file name + content type + length)
+- [x] `RegisterUserRequestValidator`:
   - first/last name required, 1–100 chars, letters, spaces, hyphens, apostrophes
   - email required, valid, ≤ 256
   - password 8–128 chars, at least one upper, one lower, one digit
   - photo required, ≤ 2 MB, `image/jpeg` | `image/png` | `image/webp`, magic bytes match the declared type
   - every rule has `.WithErrorCode(...)` and `.WithMessage(...)`
-- [ ] `RegisterUserHandler` → `Result<UserDto>`: email unique (else `UserErrors.EmailTaken`) → hash password → store photo → `User.Register` → save; delete the photo if saving fails
-- [ ] `CreateTokenRequest` + validator (email and password required)
-- [ ] `IssueTokenHandler` → `Result<TokenDto>`: find by email → verify hash → `ITokenIssuer.Issue(user)`; unknown email and wrong password both return `UserErrors.InvalidCredentials`
-- [ ] `GetUserHandler` → `Result<UserDto>`: `NotFound` if missing, `Forbidden` if not the current user
-- [ ] DTOs: `UserDto { Id, FirstName, LastName, Email, PhotoUrl }`, `TokenDto { AccessToken, TokenType = "Bearer", ExpiresIn }`
-- [ ] `AddApplication()` registration extension (handlers + validators)
+- [x] `RegisterUserHandler` → `Result<UserDto>`: email unique (else `UserErrors.EmailTaken`) → hash password → store photo → `User.Register` → save; delete the photo if saving fails
+- [x] `CreateTokenRequest` + validator (email and password required)
+- [x] `IssueTokenHandler` → `Result<TokenDto>`: find by email → verify hash → `ITokenIssuer.Issue(user)`; unknown email and wrong password both return `UserErrors.InvalidCredentials`
+- [x] `GetUserQuery` + validator, `GetUserHandler` → `Result<UserDto>`: `NotFound` if missing, `Forbidden` if not the current user
+- [x] DTOs: `UserDto { Id, FirstName, LastName, Email, PhotoUrl }`, `TokenDto { AccessToken, TokenType = "Bearer", ExpiresIn }`
+- [x] `AddApplication()` registration extension (MediatR 12.5.0 handlers + validators)
 
 ## 4. Infrastructure
 
@@ -72,9 +74,9 @@ Depends on `DiceRoller.BuildingBlocks.*` v0.1.0 (local feed or GitHub Packages).
 ## 6. Tests
 
 - [x] Unit: `Email`, `PersonName`, `User.Register` invariants throw `DomainException` with the right code
-- [ ] Unit: each validator rule, using `TestValidate(...)` and asserting error codes
-- [ ] Unit: `RegisterUserHandler` — email taken, photo deleted when save fails, success
-- [ ] Unit: `IssueTokenHandler` — unknown email, wrong password (same error), success
+- [x] Unit: each validator rule, using `TestValidate(...)` and asserting error codes
+- [x] Unit: `RegisterUserHandler` — email taken, photo deleted when save fails, success
+- [x] Unit: `IssueTokenHandler` — unknown email, wrong password (same error), success
 - [ ] Unit: `DevJwtTokenIssuer` output validates with the same `TokenValidationParameters` `AddJwtAuthentication` uses
 - [ ] Integration (Testcontainers SQL Server + `WebApplicationFactory`) — when adding the first test, remove `--ignore-exit-code 8` from the IntegrationTests csproj:
   - register → 201 with `Location`

@@ -47,7 +47,7 @@ dotnet ef migrations add <Name> \
 
 - Projects: `Api → Application → Domain`; `Infrastructure → Application`. Domain references nothing except `DiceRoller.BuildingBlocks.Domain`.
 - Domain: entities with private setters and factory methods (`User.Register(...)`); invariants guarded inside the domain; value objects for concepts like `Email`, `PersonName`.
-- Application: one handler class per use case (no MediatR); handlers depend on interfaces, never on EF or ASP.NET types.
+- Application: one MediatR request + `IRequestHandler` per use case (MediatR 12.5.0, no pipeline behaviors; validation stays in `ValidationFilter`); handlers depend on interfaces, never on EF or ASP.NET types.
 - Api: thin controllers — bind → (validation filter runs) → call one handler → map `Result` to HTTP. No business logic, no `DbContext`.
 - Infrastructure: EF Core, external storage, token issuing, hashing — all behind interfaces declared in Application.
 - Inject `TimeProvider` for time and interfaces for randomness. Never call `DateTime.UtcNow` or `Random` directly.
