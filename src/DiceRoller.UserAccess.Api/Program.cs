@@ -1,6 +1,7 @@
 using System.Threading.RateLimiting;
 using DiceRoller.BuildingBlocks.Web;
 using DiceRoller.UserAccess.Api.ModelBinding;
+using DiceRoller.UserAccess.Api.OpenApi;
 using DiceRoller.UserAccess.Api.RateLimiting;
 using DiceRoller.UserAccess.Api.Security;
 using DiceRoller.UserAccess.Application;
@@ -9,6 +10,7 @@ using DiceRoller.UserAccess.Infrastructure;
 using DiceRoller.UserAccess.Infrastructure.Persistence;
 using DiceRoller.UserAccess.Infrastructure.Photos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 
@@ -29,6 +31,9 @@ builder.Services.Configure<MvcOptions>(options =>
     // Missing fields are reported by the FluentValidation rules (with their error codes), not by MVC's implicit [Required].
     options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
 });
+
+// Adds to the "v1" document registered by AddServiceDefaults rather than registering a second one.
+builder.Services.Configure<OpenApiOptions>("v1", options => options.AddOperationTransformer<FileUploadOperationTransformer>());
 
 builder.Services.AddOptions<TokenRateLimitOptions>()
     .Bind(builder.Configuration.GetSection(TokenRateLimitOptions.SectionName))
