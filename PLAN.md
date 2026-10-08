@@ -21,11 +21,11 @@ Depends on `DiceRoller.BuildingBlocks.*` v0.1.0 (local feed or GitHub Packages).
 
 ## 2. Domain
 
-- [ ] `PersonName` value object: first and last name, trimmed, 1–100 chars each; throws `DomainException` otherwise
-- [ ] `Email` value object: trimmed, lower-cased, valid format, ≤ 256 chars; throws `DomainException` otherwise
-- [ ] `User` aggregate: `Id` (Guid v7), `Name`, `Email`, `PasswordHash`, `PhotoKey`, `CreatedAtUtc`; private setters
-- [ ] `User.Register(name, email, passwordHash, photoKey, TimeProvider)` factory guarding invariants
-- [ ] `UserErrors`: `EmailTaken`, `InvalidCredentials`, `NotFound`, `Forbidden`, plus domain codes (`InvalidEmail`, `InvalidName`)
+- [x] `PersonName` value object: first and last name, trimmed, 1–100 chars each; throws `DomainException` otherwise
+- [x] `Email` value object: trimmed, lower-cased, valid format, ≤ 256 chars; throws `DomainException` otherwise
+- [x] `User` aggregate: `Id` (Guid v7), `Name`, `Email`, `PasswordHash`, `PhotoKey`, `CreatedAtUtc`; private setters
+- [x] `User.Register(name, email, passwordHash, photoKey, TimeProvider)` factory guarding invariants
+- [x] `UserErrors`: `EmailTaken`, `InvalidCredentials`, `NotFound`, `Forbidden`, plus domain codes (`InvalidEmail`, `InvalidName`)
 
 ## 3. Application
 
@@ -71,7 +71,7 @@ Depends on `DiceRoller.BuildingBlocks.*` v0.1.0 (local feed or GitHub Packages).
 
 ## 6. Tests
 
-- [ ] Unit: `Email`, `PersonName`, `User.Register` invariants throw `DomainException` with the right code
+- [x] Unit: `Email`, `PersonName`, `User.Register` invariants throw `DomainException` with the right code
 - [ ] Unit: each validator rule, using `TestValidate(...)` and asserting error codes
 - [ ] Unit: `RegisterUserHandler` — email taken, photo deleted when save fails, success
 - [ ] Unit: `IssueTokenHandler` — unknown email, wrong password (same error), success
