@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/photos/
+**/*.user
+.git/
+.github/
+.vs/
+.vscode/
+.idea/
+tests/
+.env
+.env.*
+docker-compose*.yml
+Dockerfile
+README.md
+PLAN.md
+CLAUDE.md

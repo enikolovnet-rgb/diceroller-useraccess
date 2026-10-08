@@ -1,0 +1,45 @@
+name: diceroller-useraccess
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in .env}
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  useraccess:
+    build:
+      context: .
+      secrets:
+        - nuget_token
+    image: diceroller-useraccess:local
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ConnectionStrings__UserAccess: "Server=sqlserver;Database=UserAccess;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True"
+      Jwt__Issuer: ${JWT_ISSUER:-diceroller}
+      Jwt__Audience: ${JWT_AUDIENCE:-diceroller}
+      Jwt__SigningKey: ${JWT_SIGNING_KEY:?Set JWT_SIGNING_KEY in .env (at least 32 bytes)}
+      Jwt__ExpiryMinutes: ${JWT_EXPIRY_MINUTES:-60}
+    ports:
+      - "${USERACCESS_PORT:-5080}:8080"
+    volumes:
+      - useraccess-photos:/data/photos
+
+secrets:
+  nuget_token:
+    environment: NUGET_AUTH_TOKEN
+
+volumes:
+  sqlserver-data:
+  useraccess-photos:

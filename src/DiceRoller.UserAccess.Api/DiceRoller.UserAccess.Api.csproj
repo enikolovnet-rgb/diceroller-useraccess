@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <UserSecretsId>diceroller-useraccess-api</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DiceRoller.BuildingBlocks.Web" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DiceRoller.UserAccess.Application\DiceRoller.UserAccess.Application.csproj" />
+    <ProjectReference Include="..\DiceRoller.UserAccess.Infrastructure\DiceRoller.UserAccess.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
