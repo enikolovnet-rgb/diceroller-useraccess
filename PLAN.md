@@ -79,7 +79,7 @@ Handlers are MediatR `IRequestHandler`s (MediatR 12.5.0, the last Apache-2.0 rel
 - [x] Unit: `RegisterUserHandler` — email taken, photo deleted when save fails, success
 - [x] Unit: `IssueTokenHandler` — unknown email, wrong password (same error), success
 - [x] Unit: `DevJwtTokenIssuer` output validates with the same `TokenValidationParameters` `AddJwtAuthentication` uses
-- [ ] Integration (Testcontainers SQL Server + `WebApplicationFactory`) — when adding the first test, remove `--ignore-exit-code 8` from the IntegrationTests csproj:
+- [x] Integration (Testcontainers SQL Server + `WebApplicationFactory`) — when adding the first test, remove `--ignore-exit-code 8` from the IntegrationTests csproj:
   - register → 201 with `Location`
   - duplicate email → 409, `errorCode = User.EmailTaken`
   - invalid input (bad email, short password, wrong photo type) → 400 with per-field `errors`
@@ -90,13 +90,13 @@ Handlers are MediatR `IRequestHandler`s (MediatR 12.5.0, the last Apache-2.0 rel
 ## 7. Container and CI
 
 - [ ] Multi-stage `Dockerfile` (`sdk:10.0` → `aspnet:10.0`), non-root user, `HEALTHCHECK` on `/health/live`, photo folder as a volume
-- [ ] `docker-compose.yml`: this service + its own SQL Server 2022 (healthcheck, named volume) + photo volume; settings from `.env`
-- [ ] `.env.example` with every variable; `.env` git-ignored
-- [ ] GitHub Actions `ci.yml`: restore (package feed token) → build → unit + integration tests → on `main`, build and push image `ghcr.io/<owner>/diceroller-useraccess` tagged with commit SHA and version
-- [ ] `README.md`: purpose, run locally, configuration, endpoints, the token contract it issues
+- [x] `docker-compose.yml`: this service + its own SQL Server 2022 (healthcheck, named volume) + photo volume; settings from `.env`
+- [x] `.env.example` with every variable; `.env` git-ignored
+- [x] GitHub Actions `ci.yml`: restore (package feed token) → build → unit + integration tests → on `main`, build and push image `ghcr.io/<owner>/diceroller-useraccess` tagged with commit SHA and version
+- [x] `README.md`: purpose, run locally, configuration, endpoints, the token contract it issues
 
 ## Done when
 
-- [ ] `dotnet build` with 0 warnings, `dotnet test` green
+- [x] `dotnet build` with 0 warnings, `dotnet test` green
 - [ ] `docker compose up` from a fresh clone of this repo alone works, and every request in the `.http` file succeeds
-- [ ] Every error response (400, 401, 403, 404, 409, 500) has the standard body with `errorCode` and `traceId`
+- [x] Every error response (400, 401, 403, 404, 409, 500) has the standard body with `errorCode` and `traceId`
