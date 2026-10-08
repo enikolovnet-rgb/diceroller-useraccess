@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:5080
+# Registering the same email twice returns 409 User.EmailTaken; change it to register again.
+@email = ada@example.com
+@password = Secret123
+
+### Register a user (multipart, photo required) -> 201 + Location
+# @name register
+POST {{baseUrl}}/api/v1/users
+Content-Type: multipart/form-data; boundary=DiceRollerBoundary
+
+--DiceRollerBoundary
+Content-Disposition: form-data; name="firstName"
+
+Ada
+--DiceRollerBoundary
+Content-Disposition: form-data; name="lastName"
+
+Lovelace
+--DiceRollerBoundary
+Content-Disposition: form-data; name="email"
+
+{{email}}
+--DiceRollerBoundary
+Content-Disposition: form-data; name="password"
+
+{{password}}
+--DiceRollerBoundary
+Content-Disposition: form-data; name="photo"; filename="sample-photo.png"
+Content-Type: image/png
+
+< ./sample-photo.png
+--DiceRollerBoundary--
+
+### Exchange email + password for an access token -> 200
+# @name token
+POST {{baseUrl}}/api/v1/tokens
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Get the registered user with its own token -> 200
+GET {{register.response.headers.Location}}
+Authorization: Bearer {{token.response.body.$.accessToken}}

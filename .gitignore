@@ -58,3 +58,6 @@ nunit-*.xml
 
 # Visual Studio
 .vs/
+
+# Photos uploaded while running locally
+src/DiceRoller.UserAccess.Api/photos/

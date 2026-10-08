@@ -48,28 +48,29 @@ Handlers are MediatR `IRequestHandler`s (MediatR 12.5.0, the last Apache-2.0 rel
 
 ## 4. Infrastructure
 
-- [ ] `UserAccessDbContext`, `UserConfiguration`: table `Users`, unique index on `Email`, max lengths, owned `PersonName`, `Email` value conversion
-- [ ] Initial migration `InitialCreate`
-- [ ] `UserRepository`
-- [ ] `AspNetPasswordHasher` wrapping `PasswordHasher<User>`
-- [ ] `LocalPhotoStorage`: configurable root folder, random file name + original extension, `SaveAsync`, `DeleteAsync`, `GetUrl`
-- [ ] `DevJwtTokenIssuer` (the mock) using `JsonWebTokenHandler`, HS256:
+- [x] `UserAccessDbContext`, `UserConfiguration`: table `Users`, unique index on `Email`, max lengths, owned `PersonName`, `Email` value conversion
+- [x] Initial migration `InitialCreate`
+- [x] `UserRepository`
+- [x] `AspNetPasswordHasher` wrapping `PasswordHasher<User>`
+- [x] `LocalPhotoStorage`: configurable root folder, random file name + original extension, `SaveAsync`, `DeleteAsync`, `GetUrl`
+- [x] `DevJwtTokenIssuer` (the mock) using `JsonWebTokenHandler`, HS256:
   - claims `sub`, `email`, `given_name`, `family_name`, `jti`, `iat`
   - issuer, audience, signing key, expiry (default 60 min) from `JwtOptions`
-- [ ] `AddInfrastructure(IConfiguration)` registration extension; DB health check
+- [x] `AddInfrastructure(IConfiguration)` registration extension; DB health check
 
 ## 5. Api
 
-- [ ] `Program.cs`: `AddServiceDefaults()`, `AddApplication()`, `AddInfrastructure()`, `AddJwtAuthentication()`; migrations applied at startup in Development and in the container
-- [ ] `UsersController`
+- [x] `Program.cs`: `AddServiceDefaults()`, `AddApplication()`, `AddInfrastructure()`, `AddJwtAuthentication()`; migrations applied at startup in Development and in the container
+- [x] `UsersController`
   - `POST /api/v1/users` — `[AllowAnonymous]`, `[Consumes("multipart/form-data")]`, request size limit 3 MB → `201` + `Location`
   - `GET /api/v1/users/{id:guid}` — authenticated → `200`
-- [ ] `TokensController`
+- [x] `TokensController`
   - `POST /api/v1/tokens` — `[AllowAnonymous]`, rate limited (fixed window, 10 per minute per IP) → `200`
-- [ ] Static file serving or a `GET /api/v1/users/{id}/photo` endpoint so `PhotoUrl` resolves (pick one, document it)
-- [ ] `ICurrentUser` implementation reading `sub` from `HttpContext.User`
-- [ ] `appsettings.json` with non-secret defaults; secrets via user-secrets / env
-- [ ] `DiceRoller.UserAccess.http` with register, token, get-user examples
+- [x] Static file serving or a `GET /api/v1/users/{id}/photo` endpoint so `PhotoUrl` resolves (pick one, document it)
+  - Chosen: static files at `/photos/{key}` (`PhotoStorage:RequestPath`), anonymous (registered before auth so `<img>` tags work), `X-Content-Type-Options: nosniff`. Keys are random 128-bit values; the extension comes from the validated content type, not the client file name.
+- [x] `ICurrentUser` implementation reading `sub` from `HttpContext.User`
+- [x] `appsettings.json` with non-secret defaults; secrets via user-secrets / env
+- [x] `DiceRoller.UserAccess.http` with register, token, get-user examples
 
 ## 6. Tests
 
@@ -77,7 +78,7 @@ Handlers are MediatR `IRequestHandler`s (MediatR 12.5.0, the last Apache-2.0 rel
 - [x] Unit: each validator rule, using `TestValidate(...)` and asserting error codes
 - [x] Unit: `RegisterUserHandler` — email taken, photo deleted when save fails, success
 - [x] Unit: `IssueTokenHandler` — unknown email, wrong password (same error), success
-- [ ] Unit: `DevJwtTokenIssuer` output validates with the same `TokenValidationParameters` `AddJwtAuthentication` uses
+- [x] Unit: `DevJwtTokenIssuer` output validates with the same `TokenValidationParameters` `AddJwtAuthentication` uses
 - [ ] Integration (Testcontainers SQL Server + `WebApplicationFactory`) — when adding the first test, remove `--ignore-exit-code 8` from the IntegrationTests csproj:
   - register → 201 with `Location`
   - duplicate email → 409, `errorCode = User.EmailTaken`

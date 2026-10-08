@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\DiceRoller.UserAccess.Domain\DiceRoller.UserAccess.Domain.csproj" />
     <ProjectReference Include="..\..\src\DiceRoller.UserAccess.Application\DiceRoller.UserAccess.Application.csproj" />
+    <ProjectReference Include="..\..\src\DiceRoller.UserAccess.Infrastructure\DiceRoller.UserAccess.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
